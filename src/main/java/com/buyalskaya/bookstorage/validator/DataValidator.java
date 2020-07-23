@@ -1,7 +1,5 @@
 package com.buyalskaya.bookstorage.validator;
 
-import com.buyalskaya.bookstorage.model.entity.SortDirection;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -80,16 +78,6 @@ public class DataValidator {
         if (isPositiveIntegerNumber(page)) {
             int pageNumber = Integer.parseInt(page);
             isValid = (pageNumber >= MIN_PAGE && pageNumber <= MAX_PAGE);
-        }
-        return isValid;
-    }
-
-    public boolean isSortDirectionValid(String sortDirection) {
-        boolean isValid = false;
-        if (sortDirection != null && !sortDirection.isEmpty()) {
-            String directionUpper = sortDirection.toUpperCase();
-            isValid = Stream.of(SortDirection.values())
-                    .anyMatch(d -> directionUpper.equals(d.toString()));
         }
         return isValid;
     }
