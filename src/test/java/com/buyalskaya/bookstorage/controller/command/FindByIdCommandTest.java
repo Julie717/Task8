@@ -1,7 +1,6 @@
 package com.buyalskaya.bookstorage.controller.command;
 
 import com.buyalskaya.bookstorage.controller.command.impl.FindByIdCommand;
-import com.buyalskaya.bookstorage.exception.LibraryException;
 import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import com.buyalskaya.bookstorage.controller.Response;
 import org.testng.annotations.BeforeClass;
