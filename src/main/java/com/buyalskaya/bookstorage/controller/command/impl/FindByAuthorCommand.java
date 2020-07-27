@@ -6,6 +6,7 @@ import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import com.buyalskaya.bookstorage.model.service.BookService;
 import com.buyalskaya.bookstorage.controller.Response;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,11 @@ public class FindByAuthorCommand implements Command {
                 response.setCompletedSuccess(true);
                 response.setBooks(books);
             } catch (ServiceException ex) {
-                response.setMessage(ex.getMessage() + ex.getCause().getMessage());
+                String errorMessage = ex.getMessage();
+                if (ex.getCause() != null) {
+                    errorMessage = errorMessage + ex.getCause().getMessage();
+                }
+                response.setMessage(errorMessage);
             }
         } else {
             response.setMessage(INCORRECT_MESSAGE);

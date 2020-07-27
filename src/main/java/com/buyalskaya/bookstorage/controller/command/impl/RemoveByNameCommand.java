@@ -23,7 +23,11 @@ public class RemoveByNameCommand implements Command {
                 response.setCompletedSuccess(true);
                 response.setMessage(CORRECT_MESSAGE);
             } catch (ServiceException ex) {
-                response.setMessage(ex.getMessage() + ex.getCause().getMessage());
+                String errorMessage = ex.getMessage();
+                if (ex.getCause() != null) {
+                    errorMessage = errorMessage + ex.getCause().getMessage();
+                }
+                response.setMessage(errorMessage);
             }
         } else {
             response.setMessage(INCORRECT_MESSAGE);

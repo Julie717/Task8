@@ -8,27 +8,29 @@ public class CustomBook extends CustomEntity {
     private String name;
     private List<String> author;
     private String edition;
-    private int year;
-    private int page;
+    private int publishingYear;
+    private int numberOfPages;
 
     public CustomBook() {
     }
 
-    public CustomBook(String name, List<String> author, String edition, int year, int page) {
+    public CustomBook(String name, List<String> author, String edition,
+                      int publishingYear, int numberOfPages) {
         this.name = name;
         this.author = author;
         this.edition = edition;
-        this.year = year;
-        this.page = page;
+        this.publishingYear = publishingYear;
+        this.numberOfPages = numberOfPages;
     }
 
-    public CustomBook(long bookId, String name, List<String> author, String edition, int year, int page) {
+    public CustomBook(long bookId, String name, List<String> author, String edition,
+                      int publishingYear, int numberOfPages) {
         this.bookId = bookId;
         this.name = name;
         this.author = author;
         this.edition = edition;
-        this.year = year;
-        this.page = page;
+        this.publishingYear = publishingYear;
+        this.numberOfPages = numberOfPages;
     }
 
     public void setBookId(long bookId) {
@@ -63,20 +65,20 @@ public class CustomBook extends CustomEntity {
         this.edition = edition;
     }
 
-    public int getYear() {
-        return year;
+    public int getPublishingYear() {
+        return publishingYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setPublishingYear(int publishingYear) {
+        this.publishingYear = publishingYear;
     }
 
-    public int getPage() {
-        return page;
+    public int getNumberOfPages() {
+        return numberOfPages;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setNumberOfPages(int numberOfPages) {
+        this.numberOfPages = numberOfPages;
     }
 
     @Override
@@ -100,12 +102,12 @@ public class CustomBook extends CustomEntity {
                 (edition != null && book.edition != null && !edition.equals(book.edition))) {
             return false;
         }
-        return (bookId == book.bookId) && (year == book.year) && (page == book.page);
+        return (bookId == book.bookId) && (publishingYear == book.publishingYear) && (numberOfPages == book.numberOfPages);
     }
 
     @Override
     public int hashCode() {
-        return (int) bookId + name.hashCode() + author.hashCode() + edition.hashCode() + year + page * 31;
+        return (int) bookId + name.hashCode() + author.hashCode() + edition.hashCode() + publishingYear + numberOfPages * 31;
     }
 
     @Override
@@ -115,8 +117,8 @@ public class CustomBook extends CustomEntity {
                 .add("name='" + name + "'")
                 .add("author=" + author)
                 .add("edition='" + edition + "'")
-                .add("year=" + year)
-                .add("page=" + page)
+                .add("year=" + publishingYear)
+                .add("page=" + numberOfPages)
                 .toString();
     }
 }

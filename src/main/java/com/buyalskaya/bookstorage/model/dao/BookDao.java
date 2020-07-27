@@ -11,4 +11,6 @@ public interface BookDao extends AbstractDao<Long, CustomBook> {
     List<CustomBook> findByName(String name) throws DaoException;
 
     List<CustomBook> findByAuthor(String author) throws DaoException;
+
+    List<CustomBook> findOldBook() throws DaoException;
 }

@@ -3,12 +3,12 @@ package com.buyalskaya.bookstorage.validator;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class DataValidator {
     private final static String REGEX_LETTER = ".*\\pL.*";
     private final static String REGEX_AUTHOR = "(\\pL[\\pL\\s]+)|(\\pL\\.(\\s)*(\\pL\\.(\\s)*)?\\pL+)";
-    private final static int MIN_ID = 1;
+    private final static long MIN_ID = 1;
+    private final static long MAX_ID = Long.MAX_VALUE;
     private final static int MIN_YEAR = 1400;
     private final static int MAX_YEAR = LocalDate.now().getYear();
     private final static int MIN_PAGE = 1;
@@ -26,8 +26,8 @@ public class DataValidator {
     public boolean isIdValid(String id) {
         boolean isValid = isPositiveIntegerNumber(id);
         if (isValid) {
-            int idInt = Integer.parseInt(id);
-            isValid = idInt > MIN_ID;
+            long idLong = Long.parseLong(id);
+            isValid = (idLong > MIN_ID) && (idLong <= MAX_ID);
         }
         return isValid;
     }
@@ -40,10 +40,10 @@ public class DataValidator {
         return isValid;
     }
 
-    public boolean isAuthorValid(List<String> author) {
+    public boolean isAuthorValid(List<String> authors) {
         boolean isValid = false;
-        if (author != null) {
-            isValid = author.stream().allMatch(a -> isAuthorValid(a));
+        if (authors != null) {
+            isValid = authors.stream().allMatch(a -> isAuthorValid(a));
         }
         return isValid;
     }

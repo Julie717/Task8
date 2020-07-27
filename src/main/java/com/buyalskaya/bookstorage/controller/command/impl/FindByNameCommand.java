@@ -24,7 +24,11 @@ public class FindByNameCommand implements Command {
                 response.setCompletedSuccess(true);
                 response.setBooks(books);
             } catch (ServiceException ex) {
-                response.setMessage(ex.getMessage() + ex.getCause().getMessage());
+                String errorMessage = ex.getMessage();
+                if (ex.getCause() != null) {
+                    errorMessage = errorMessage + ex.getCause().getMessage();
+                }
+                response.setMessage(errorMessage);
             }
         } else {
             response.setMessage(INCORRECT_MESSAGE);

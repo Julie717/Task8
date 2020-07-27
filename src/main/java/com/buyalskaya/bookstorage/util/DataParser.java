@@ -1,4 +1,4 @@
-package com.buyalskaya.bookstorage.utility;
+package com.buyalskaya.bookstorage.util;
 
 import java.util.List;
 

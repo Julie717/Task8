@@ -9,7 +9,8 @@ public enum CommandType {
     FIND_ALL(new FindAllCommand()),
     FIND_BY_ID(new FindByIdCommand()),
     FIND_BY_NAME(new FindByNameCommand()),
-    FIND_BY_AUTHOR(new FindByAuthorCommand());
+    FIND_BY_AUTHOR(new FindByAuthorCommand()),
+    FIND_OLD_BOOK(new FindOldBookCommand());
 
     private Command command;
 
