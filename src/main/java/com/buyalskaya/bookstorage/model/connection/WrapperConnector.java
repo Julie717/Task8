@@ -32,12 +32,10 @@ public class WrapperConnector {
     }
 
     public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Connection isn't closed");
-            }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.err.println("Connection isn't closed");
         }
     }
 }
