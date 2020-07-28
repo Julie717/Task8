@@ -1,6 +1,5 @@
 package com.buyalskaya.bookstorage.model.service;
 
-import com.buyalskaya.bookstorage.exception.DaoException;
 import com.buyalskaya.bookstorage.exception.ServiceException;
 import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import org.testng.annotations.BeforeClass;
@@ -107,6 +106,129 @@ public class BookServiceTest {
         expected.add(book);
         assertEquals(actual, expected);
     }
+
+    @DataProvider(name = "dataForFindByEdition")
+    public Object[][] dataForFindByEdition() {
+        return new Object[][]{
+                {"Эксмо"},
+                {"147"},
+                {""}
+        };
+    }
+
+    @Test(dataProvider = "dataForFindByEdition")
+    public void findByEditionTestParams(String edition) {
+        assertThrows(ServiceException.class, () -> bookService.findByEdition(edition));
+    }
+
+    @Test
+    public void findByEditionTestPositive() throws ServiceException {
+        List<CustomBook> actual = bookService.findByEdition("Азбука");
+        List<CustomBook> expected = new ArrayList<>();
+        long bookId = 28L;
+        String name = "Горе от ума";
+        List<String> author = new ArrayList<>();
+        author.add("Александр Грибоедов");
+        String edition = "Азбука";
+        int year = 2018;
+        int page = 256;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        bookId = 31L;
+        name = "Портрет Дориана Грея";
+        author = new ArrayList<>();
+        author.add("Оскар Уайльд");
+        edition = "Азбука";
+        year = 2017;
+        page = 320;
+        book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "dataForFindByYear")
+    public Object[][] dataForFindByYear() {
+        return new Object[][]{
+                {"2026"},
+                {"1400, 1325"},
+                {""},
+                {null}
+        };
+    }
+
+    @Test(dataProvider = "dataForFindByYear")
+    public void findByYearTestParams(String year) {
+        assertThrows(ServiceException.class, () -> bookService.findByYear(year));
+    }
+
+    @Test
+    public void findByYearTestPositive() throws ServiceException {
+        List<CustomBook> actual = bookService.findByYear("2018,2017");
+        List<CustomBook> expected = new ArrayList<>();
+        long bookId = 28L;
+        String name = "Горе от ума";
+        List<String> author = new ArrayList<>();
+        author.add("Александр Грибоедов");
+        String edition = "Азбука";
+        int year = 2018;
+        int page = 256;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        bookId = 31L;
+        name = "Портрет Дориана Грея";
+        author = new ArrayList<>();
+        author.add("Оскар Уайльд");
+        edition = "Азбука";
+        year = 2017;
+        page = 320;
+        book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "dataForFindByPage")
+    public Object[][] dataForFindByPage() {
+        return new Object[][]{
+                {"980"},
+                {"0, 327"},
+                {"-178"},
+                {"12,15,147"},
+                {""},
+                {null}
+        };
+    }
+
+    @Test(dataProvider = "dataForFindByPage")
+    public void findByPageTestParams(String page) {
+        assertThrows(ServiceException.class, () -> bookService.findByPage(page));
+    }
+
+    @Test
+    public void findByPageTestPositive() throws ServiceException {
+        List<CustomBook> actual = bookService.findByPage("250,300");
+        List<CustomBook> expected = new ArrayList<>();
+        long bookId = 15L;
+        String name = "Memoirs and Misinformation";
+        List<String> author = new ArrayList<>();
+        author.add("Jim Carrey");
+        author.add("Dana Vachon");
+        String edition = "Knopf";
+        int year = 2020;
+        int page = 272;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        bookId = 28L;
+        name = "Горе от ума";
+        author = new ArrayList<>();
+        author.add("Александр Грибоедов");
+        edition = "Азбука";
+        year = 2018;
+        page = 256;
+        book = new CustomBook(bookId, name, author, edition, year, page);
+        expected.add(book);
+        assertEquals(actual, expected);
+    }
+
     @Test
     public void findOldBookTestPositive() throws ServiceException {
         List<CustomBook> actual = bookService.findOldBook();
@@ -114,7 +236,7 @@ public class BookServiceTest {
         String name = "Notre-Dame de Paris";
         List<String> author = new ArrayList<>();
         author.add("Victor Hugo");
-        String edition= "Oxford University Press, Reissue edition";
+        String edition = "Oxford University Press, Reissue edition";
         int year = 2009;
         int page = 592;
         CustomBook book = new CustomBook(bookId, name,

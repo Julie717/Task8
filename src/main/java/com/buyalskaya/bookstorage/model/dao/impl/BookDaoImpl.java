@@ -3,9 +3,10 @@ package com.buyalskaya.bookstorage.model.dao.impl;
 import com.buyalskaya.bookstorage.model.connection.WrapperConnector;
 import com.buyalskaya.bookstorage.model.dao.BookDao;
 import com.buyalskaya.bookstorage.model.dao.ColumnName;
+import com.buyalskaya.bookstorage.model.dao.SortTag;
 import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import com.buyalskaya.bookstorage.exception.DaoException;
-import com.buyalskaya.bookstorage.util.DataParser;
+import com.buyalskaya.bookstorage.parser.DataParser;
 
 import java.sql.*;
 import java.util.*;
@@ -22,11 +23,18 @@ public class BookDaoImpl implements BookDao {
             "publishing_year, number_of_pages FROM book WHERE (SELECT INSTR(name, ?) > 0)";
     private static final String SQL_SELECT_BOOK_BY_AUTHOR = "SELECT id, name, author, edition, " +
             "publishing_year, number_of_pages FROM book WHERE (SELECT INSTR(author, ?) > 0)";
+    private static final String SQL_SELECT_BOOK_BY_EDITION = "SELECT id, name, author, edition, " +
+            "publishing_year, number_of_pages FROM book WHERE (SELECT INSTR(edition, ?) > 0)";
+    private final static String SQL_SELECT_BOOK_BY_YEAR = "SELECT id, name, author, edition, " +
+            "publishing_year, number_of_pages FROM book WHERE publishing_year BETWEEN ? AND ?";
+    private final static String SQL_SELECT_BOOK_BY_PAGE = "SELECT id, name, author, edition, " +
+            "publishing_year, number_of_pages FROM book WHERE number_of_pages BETWEEN ? AND ?";
     private static final String SQL_SELECT_ALL_BOOKS = "SELECT id, name, author, edition, " +
             "publishing_year, number_of_pages FROM book";
     private static final String SQL_SELECT_OLD_BOOK = "SELECT id, name, author, edition, " +
             "publishing_year, number_of_pages FROM book WHERE publishing_year IN " +
             "(SELECT MIN(publishing_year) FROM book)";
+    private static final String SQL_SORT_FORMAT_STRING = SQL_SELECT_ALL_BOOKS + " ORDER BY %s";
     private WrapperConnector wrapperConnector;
 
     public BookDaoImpl() throws DaoException {
@@ -34,16 +42,16 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void add(CustomBook entity) throws DaoException {
+    public void add(CustomBook book) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = wrapperConnector.getConnection().prepareStatement(SQL_INSERT_BOOK);
-            preparedStatement.setString(1, entity.getName());
-            String author = String.join(",", entity.getAuthor());
+            preparedStatement.setString(1, book.getName());
+            String author = String.join(",", book.getAuthor());
             preparedStatement.setString(2, author);
-            preparedStatement.setString(3, entity.getEdition());
-            preparedStatement.setInt(4, entity.getPublishingYear());
-            preparedStatement.setInt(5, entity.getNumberOfPages());
+            preparedStatement.setString(3, book.getEdition());
+            preparedStatement.setInt(4, book.getPublishingYear());
+            preparedStatement.setInt(5, book.getNumberOfPages());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("SQL exception (request or table failed)", ex);
@@ -153,12 +161,112 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public List<CustomBook> findByEdition(String edition) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = wrapperConnector.getConnection().prepareStatement(SQL_SELECT_BOOK_BY_EDITION);
+            List<CustomBook> books = new ArrayList<>();
+            preparedStatement.setString(1, edition);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CustomBook book = createBookFromResetSet(resultSet);
+                books.add(book);
+            }
+            if (books.isEmpty()) {
+                throw new DaoException("The book isn't found");
+            }
+            return books;
+        } catch (SQLException ex) {
+            throw new DaoException("SQL exception (request or table failed)", ex);
+        } finally {
+            wrapperConnector.closeStatement(preparedStatement);
+        }
+    }
+
+    @Override
+    public List<CustomBook> findByYear(int... year) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = wrapperConnector.getConnection().prepareStatement(SQL_SELECT_BOOK_BY_YEAR);
+            List<CustomBook> books = new ArrayList<>();
+            preparedStatement.setInt(1, year[0]);
+            preparedStatement.setInt(2, year[0]);
+            if (year.length == 2) {
+                preparedStatement.setInt(2, year[1]);
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CustomBook book = createBookFromResetSet(resultSet);
+                books.add(book);
+            }
+            if (books.isEmpty()) {
+                throw new DaoException("The book isn't found");
+            }
+            return books;
+        } catch (SQLException ex) {
+            throw new DaoException("SQL exception (request or table failed)", ex);
+        } finally {
+            wrapperConnector.closeStatement(preparedStatement);
+        }
+    }
+
+    @Override
+    public List<CustomBook> findByPage(int... page) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = wrapperConnector.getConnection().prepareStatement(SQL_SELECT_BOOK_BY_PAGE);
+            List<CustomBook> books = new ArrayList<>();
+            preparedStatement.setInt(1, page[0]);
+            preparedStatement.setInt(2, page[0]);
+            if (page.length == 2) {
+                preparedStatement.setInt(2, page[1]);
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CustomBook book = createBookFromResetSet(resultSet);
+                books.add(book);
+            }
+            if (books.isEmpty()) {
+                throw new DaoException("The book isn't found");
+            }
+            return books;
+        } catch (SQLException ex) {
+            throw new DaoException("SQL exception (request or table failed)", ex);
+        } finally {
+            wrapperConnector.closeStatement(preparedStatement);
+        }
+    }
+
+    @Override
     public List<CustomBook> findAll() throws DaoException {
         Statement statement = null;
         try {
             statement = wrapperConnector.getConnection().createStatement();
             List<CustomBook> books = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_BOOKS);
+            while (resultSet.next()) {
+                CustomBook book = createBookFromResetSet(resultSet);
+                books.add(book);
+            }
+            if (books.isEmpty()) {
+                throw new DaoException("Books aren't found");
+            }
+            return books;
+        } catch (SQLException ex) {
+            throw new DaoException("SQL exception (request or table failed)", ex);
+        } finally {
+            wrapperConnector.closeStatement(statement);
+        }
+    }
+
+    @Override
+    public List<CustomBook> sortByTag(SortTag tag) throws DaoException {
+        Statement statement = null;
+        try {
+            String sqlQuery = String.format(SQL_SORT_FORMAT_STRING, tag.getColumnName());
+            statement = wrapperConnector.getConnection().createStatement();
+            List<CustomBook> books = new ArrayList<>();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
             while (resultSet.next()) {
                 CustomBook book = createBookFromResetSet(resultSet);
                 books.add(book);

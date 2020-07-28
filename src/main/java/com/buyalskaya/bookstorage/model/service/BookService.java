@@ -2,10 +2,11 @@ package com.buyalskaya.bookstorage.model.service;
 
 import com.buyalskaya.bookstorage.exception.ServiceException;
 import com.buyalskaya.bookstorage.model.dao.BookDao;
+import com.buyalskaya.bookstorage.model.dao.SortTag;
 import com.buyalskaya.bookstorage.model.dao.impl.BookDaoImpl;
 import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import com.buyalskaya.bookstorage.exception.DaoException;
-import com.buyalskaya.bookstorage.util.DataParser;
+import com.buyalskaya.bookstorage.parser.DataParser;
 import com.buyalskaya.bookstorage.validator.DataValidator;
 
 import java.util.List;
@@ -134,11 +135,91 @@ public class BookService {
         }
     }
 
+    public List<CustomBook> findByEdition(String edition) throws ServiceException {
+        DataValidator dataValidator = new DataValidator();
+        if (!dataValidator.isEditionValid(edition)) {
+            throw new ServiceException("Incorrect book edition");
+        }
+        BookDao bookListDao = null;
+        try {
+            bookListDao = new BookDaoImpl();
+            List<CustomBook> books = bookListDao.findByEdition(edition);
+            return books;
+        } catch (DaoException ex) {
+            throw new ServiceException("DaoException was found: ", ex);
+        } finally {
+            if (bookListDao != null) {
+                bookListDao.close();
+            }
+        }
+    }
+
+    public List<CustomBook> findByYear(String year) throws ServiceException {
+        DataValidator dataValidator = new DataValidator();
+        if (!dataValidator.isYearValid(year)) {
+            throw new ServiceException("Incorrect book year");
+        }
+        DataParser dataParser = new DataParser();
+        int[] years = dataParser.yearParserToInt(year);
+        BookDao bookListDao = null;
+        try {
+            bookListDao = new BookDaoImpl();
+            List<CustomBook> books = bookListDao.findByYear(years);
+            return books;
+        } catch (DaoException ex) {
+            throw new ServiceException("DaoException was found: ", ex);
+        } finally {
+            if (bookListDao != null) {
+                bookListDao.close();
+            }
+        }
+    }
+
+    public List<CustomBook> findByPage(String page) throws ServiceException {
+        DataValidator dataValidator = new DataValidator();
+        if (!dataValidator.isPageValid(page)) {
+            throw new ServiceException("Incorrect book page");
+        }
+        DataParser dataParser = new DataParser();
+        int[] pages = dataParser.pageParserToInt(page);
+        BookDao bookListDao = null;
+        try {
+            bookListDao = new BookDaoImpl();
+            List<CustomBook> books = bookListDao.findByPage(pages);
+            return books;
+        } catch (DaoException ex) {
+            throw new ServiceException("DaoException was found: ", ex);
+        } finally {
+            if (bookListDao != null) {
+                bookListDao.close();
+            }
+        }
+    }
+
     public List<CustomBook> findAll() throws ServiceException {
         BookDao bookListDao = null;
         try {
             bookListDao = new BookDaoImpl();
             List<CustomBook> books = bookListDao.findAll();
+            return books;
+        } catch (DaoException ex) {
+            throw new ServiceException("DaoException was found: ", ex);
+        } finally {
+            if (bookListDao != null) {
+                bookListDao.close();
+            }
+        }
+    }
+
+    public List<CustomBook> sort(String sortField) throws ServiceException {
+        DataValidator dataValidator = new DataValidator();
+        if (!dataValidator.isSortFieldValid(sortField)) {
+            throw new ServiceException("Incorrect field for sorting");
+        }
+        BookDao bookListDao = null;
+        try {
+            bookListDao = new BookDaoImpl();
+            List<CustomBook> books = bookListDao.sortByTag(SortTag.valueOf(sortField.toUpperCase()));
             return books;
         } catch (DaoException ex) {
             throw new ServiceException("DaoException was found: ", ex);

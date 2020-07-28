@@ -100,10 +100,15 @@ public class DataValidatorTest {
     public Object[][] dataForIsYearValid() {
         return new Object[][]{
                 {"1996", true},
+                {"1996,1587", true},
                 {"1876", true},
+                {"2007, 2020", true},
                 {"0", false},
                 {"-15", false},
                 {"1300", false},
+                {"2015, 2016, 2017", false},
+                {"2015, 2016, ", false},
+                {"0015, 7810", false},
                 {"2025", false},
                 {"one", false},
                 {"", false},
@@ -122,9 +127,14 @@ public class DataValidatorTest {
         return new Object[][]{
                 {"195", true},
                 {"987", true},
+                {"115,175", true},
+                {"325, 175", true},
                 {"0", false},
                 {"-15", false},
                 {"13000", false},
+                {"125,130,135", false},
+                {"125, 13000", false},
+                {", 13000", false},
                 {"15o8", false},
                 {"", false},
                 {null, false}
@@ -134,6 +144,25 @@ public class DataValidatorTest {
     @Test(dataProvider = "dataForIsPageValid")
     public void isPageValidTestParams(String page, boolean expected) {
         boolean actual = dataValidator.isPageValid(page);
+        assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "dataForIsSortFieldValid")
+    public Object[][] dataForIsSortFieldValid() {
+        return new Object[][]{
+                {"year", true},
+                {"Name", true},
+                {"id", true},
+                {"price", false},
+                {"15", false},
+                {"", false},
+                {null, false}
+        };
+    }
+
+    @Test(dataProvider = "dataForIsSortFieldValid")
+    public void isSortFieldValidTestParams(String page, boolean expected) {
+        boolean actual = dataValidator.isSortFieldValid(page);
         assertEquals(actual, expected);
     }
 }

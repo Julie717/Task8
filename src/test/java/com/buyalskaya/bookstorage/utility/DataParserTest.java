@@ -1,6 +1,6 @@
 package com.buyalskaya.bookstorage.utility;
 
-import com.buyalskaya.bookstorage.util.DataParser;
+import com.buyalskaya.bookstorage.parser.DataParser;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -32,6 +32,38 @@ public class DataParserTest {
     @Test(dataProvider = "dataForAuthorParser")
     public void authorParserTestParams(String author, List<String> expected) {
         List<String> actual = dataParser.authorParser(author);
+        assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "dataForYearParserToInt")
+    public Object[][] dataForYearParserToInt() {
+        return new Object[][]{
+                {"2017,2020", new int[]{2017, 2020}},
+                {"2020, 2014", new int[]{2014, 2020}},
+                {"2000", new int[]{2000}},
+                {"  1987", new int[]{1987}}
+        };
+    }
+
+    @Test(dataProvider = "dataForYearParserToInt")
+    public void yearParserToIntTestParams(String year, int[] expected) {
+        int[] actual = dataParser.yearParserToInt(year);
+        assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "dataForPageParserToInt")
+    public Object[][] dataForPageParserToInt() {
+        return new Object[][]{
+                {"117,445", new int[]{117, 445}},
+                {"1251, 145", new int[]{145, 1251}},
+                {"610", new int[]{610}},
+                {"  378", new int[]{378}}
+        };
+    }
+
+    @Test(dataProvider = "dataForPageParserToInt")
+    public void pageParserToIntTestParams(String page, int[] expected) {
+        int[] actual = dataParser.yearParserToInt(page);
         assertEquals(actual, expected);
     }
 }

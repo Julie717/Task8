@@ -2,7 +2,6 @@ package com.buyalskaya.bookstorage.controller.command;
 
 import com.buyalskaya.bookstorage.controller.Response;
 import com.buyalskaya.bookstorage.controller.command.impl.FindOldBookCommand;
-import com.buyalskaya.bookstorage.exception.ServiceException;
 import com.buyalskaya.bookstorage.model.entity.CustomBook;
 import org.testng.annotations.Test;
 

@@ -76,6 +76,73 @@ public class BookControllerTest {
     }
 
     @Test
+    public void findByEditionTest() {
+        String commandName = "FIND_BY_EDITION";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("edition", "Classic");
+        Response expected = new Response();
+        expected.setCompletedSuccess(true);
+        List<CustomBook> books = new ArrayList<>();
+        long bookId = 21L;
+        String name = "Les Miserables";
+        List<String> author = new ArrayList<>();
+        author.add("Victor Hugo");
+        String edition = "Canterbury Classics";
+        int year = 2015;
+        int page = 1264;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        books.add(book);
+        expected.setBooks(books);
+        Response actual = BookController.getInstance().processRequest(commandName, parameters);
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void findByYearTest() {
+        String commandName = "FIND_BY_year";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("year", "2015");
+        Response expected = new Response();
+        expected.setCompletedSuccess(true);
+        List<CustomBook> books = new ArrayList<>();
+        long bookId = 21L;
+        String name = "Les Miserables";
+        List<String> author = new ArrayList<>();
+        author.add("Victor Hugo");
+        String edition = "Canterbury Classics";
+        int year = 2015;
+        int page = 1264;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        books.add(book);
+        expected.setBooks(books);
+        Response actual = BookController.getInstance().processRequest(commandName, parameters);
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void findByPageTest() {
+        String commandName = "FIND_BY_Page";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("page", "272");
+        Response expected = new Response();
+        expected.setCompletedSuccess(true);
+        List<CustomBook> books = new ArrayList<>();
+        long bookId = 15L;
+        String name = "Memoirs and Misinformation";
+        List<String> author = new ArrayList<>();
+        author.add("Jim Carrey");
+        author.add("Dana Vachon");
+        String edition = "Knopf";
+        int year = 2020;
+        int page = 272;
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
+        books.add(book);
+        expected.setBooks(books);
+        Response actual = BookController.getInstance().processRequest(commandName, parameters);
+        assertEquals(actual, expected);
+    }
+
+    @Test
     public void findOldBookTest() {
         String commandName = "find_old_book";
         Map<String, String> parameters = new HashMap<>();
@@ -88,8 +155,7 @@ public class BookControllerTest {
         String edition = "Oxford University Press, Reissue edition";
         int year = 2009;
         int page = 592;
-        CustomBook book = new CustomBook(bookId, name,
-                author, edition, year, page);
+        CustomBook book = new CustomBook(bookId, name, author, edition, year, page);
         List<CustomBook> books = new ArrayList<>();
         books.add(book);
         bookId = 25L;

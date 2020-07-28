@@ -1,10 +1,7 @@
 package com.buyalskaya.bookstorage.controller;
 
 import com.buyalskaya.bookstorage.controller.command.Command;
-import com.buyalskaya.bookstorage.controller.command.impl.AddCommand;
-import com.buyalskaya.bookstorage.controller.command.impl.EmptyCommand;
-import com.buyalskaya.bookstorage.controller.command.impl.FindByIdCommand;
-import com.buyalskaya.bookstorage.controller.command.impl.FindByNameCommand;
+import com.buyalskaya.bookstorage.controller.command.impl.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -18,6 +15,7 @@ public class ActionProviderTest {
                 {"Add", new AddCommand()},
                 {"find_by_name", new FindByNameCommand()},
                 {"FIND_by_ID", new FindByIdCommand()},
+                {"SOrt_by_tag", new SortByTagCommand()},
                 {"addition", new EmptyCommand()},
                 {"", new EmptyCommand()},
                 {null, new EmptyCommand()}
