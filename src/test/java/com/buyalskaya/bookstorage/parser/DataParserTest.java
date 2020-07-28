@@ -1,6 +1,5 @@
-package com.buyalskaya.bookstorage.utility;
+package com.buyalskaya.bookstorage.parser;
 
-import com.buyalskaya.bookstorage.parser.DataParser;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
