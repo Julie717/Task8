@@ -20,7 +20,7 @@ public class SortByTagCommand implements Command {
             String sortField = parameters.get(PARAM_SORT_TAG);
             BookService bookService = new BookService();
             try {
-                List<CustomBook> books = bookService.sort(sortField);
+                List<CustomBook> books = bookService.sortByTag(sortField);
                 response.setCompletedSuccess(true);
                 response.setBooks(books);
             } catch (ServiceException ex) {

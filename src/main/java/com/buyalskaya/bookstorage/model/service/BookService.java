@@ -211,15 +211,15 @@ public class BookService {
         }
     }
 
-    public List<CustomBook> sort(String sortField) throws ServiceException {
+    public List<CustomBook> sortByTag(String sortTag) throws ServiceException {
         DataValidator dataValidator = new DataValidator();
-        if (!dataValidator.isSortFieldValid(sortField)) {
+        if (!dataValidator.isSortFieldValid(sortTag)) {
             throw new ServiceException("Incorrect field for sorting");
         }
         BookDao bookListDao = null;
         try {
             bookListDao = new BookDaoImpl();
-            List<CustomBook> books = bookListDao.sortByTag(SortTag.valueOf(sortField.toUpperCase()));
+            List<CustomBook> books = bookListDao.sortByTag(SortTag.valueOf(sortTag.toUpperCase()));
             return books;
         } catch (DaoException ex) {
             throw new ServiceException("DaoException was found: ", ex);
