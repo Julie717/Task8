@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,11 +63,14 @@ public class DataValidatorTest {
     public Object[][] dataForIsListAuthorValid() {
         return new Object[][]{
                 {Arrays.asList("J.K.Rowling", "Victor Hugo", "Александр Сергеевич Пушкин", "S. King"), true},
+                {Arrays.asList("Антуан де Сент-Экзюпери"), true},
+                {Arrays.asList("А. дe Сент-Экзюпери"), true},
                 {Arrays.asList("S.S.S.King", "Victor Hugo"), false},
                 {Arrays.asList("Victor Hugo", ""), false},
                 {Arrays.asList("Victor Hugo", " "), false},
                 {Arrays.asList("Victor Hugo", "4"), false},
                 {Arrays.asList("Victor Hugo", null), false},
+                {new ArrayList<>(), false},
                 {null, false}
         };
     }

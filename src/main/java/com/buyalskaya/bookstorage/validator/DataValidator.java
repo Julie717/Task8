@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class DataValidator {
     private final static String REGEX_LETTER = ".*\\pL.*";
-    private final static String REGEX_AUTHOR = "(\\pL[\\pL\\s]+)|(\\pL\\.(\\s)*(\\pL\\.(\\s)*)?\\pL+)";
+    private final static String REGEX_AUTHOR = "(\\pL[\\pL\\s-]+)|(\\pL\\.(\\s)*(\\pL\\.(\\s)*)?[\\pL\\s-]+)";
     private final static String REGEX_YEAR = "(\\s*)\\d{4}(\\s*)(,(\\s*)\\d{4}(\\s*))?";
     private final static String REGEX_PAGE = "(\\s*)\\d{1,5}(\\s*)(,(\\s*)\\d{1,5}(\\s*))?";
     private final static long MIN_ID = 1;
@@ -23,7 +23,7 @@ public class DataValidator {
 
     private boolean isPositiveIntegerNumber(String number) {
         boolean isValid = false;
-        if (number != null) {
+        if (number != null && !number.isEmpty()) {
             isValid = Pattern.matches(CHECK_NUMBER, number);
         }
         return isValid;
@@ -48,7 +48,7 @@ public class DataValidator {
 
     public boolean isAuthorValid(List<String> authors) {
         boolean isValid = false;
-        if (authors != null) {
+        if (authors != null && !authors.isEmpty()) {
             isValid = authors.stream().allMatch(a -> isAuthorValid(a));
         }
         return isValid;
@@ -98,7 +98,7 @@ public class DataValidator {
 
     public boolean isSortFieldValid(String sortField) {
         boolean isValid = false;
-        if (sortField != null) {
+        if (sortField != null && !sortField.isEmpty()) {
             isValid = Arrays.stream(SortTag.values())
                     .anyMatch(p -> p.name().equals(sortField.toUpperCase()));
         }

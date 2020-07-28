@@ -6,6 +6,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.*;
@@ -25,7 +26,8 @@ public class DataParserTest {
                 {"James Kurose, Keith Ross", List.of("James Kurose", "Keith Ross")},
                 {"J.Kurose, K.Ross", List.of("J.Kurose", "K.Ross")},
                 {"S.L.Garfinkel, R.H.Grunspan", List.of("S.L.Garfinkel", "R.H.Grunspan")},
-                {"", List.of("")}
+                {"", new ArrayList<>()},
+                {null, new ArrayList<>()}
         };
     }
 
@@ -41,7 +43,9 @@ public class DataParserTest {
                 {"2017,2020", new int[]{2017, 2020}},
                 {"2020, 2014", new int[]{2014, 2020}},
                 {"2000", new int[]{2000}},
-                {"  1987", new int[]{1987}}
+                {"  1987", new int[]{1987}},
+                {"", new int[]{}},
+                {null, new int[]{}}
         };
     }
 
@@ -57,7 +61,9 @@ public class DataParserTest {
                 {"117,445", new int[]{117, 445}},
                 {"1251, 145", new int[]{145, 1251}},
                 {"610", new int[]{610}},
-                {"  378", new int[]{378}}
+                {"  378", new int[]{378}},
+                {"", new int[]{}},
+                {null, new int[]{}}
         };
     }
 

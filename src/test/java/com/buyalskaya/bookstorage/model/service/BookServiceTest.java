@@ -18,6 +18,23 @@ public class BookServiceTest {
         bookService = new BookService();
     }
 
+    @DataProvider(name = "dataForBookAdd")
+    public Object[][] dataForBookAdd() {
+        return new Object[][]{
+                {"Маленький принц", "", "Эксмо", "2016", "104"},
+                {"", "Антуан де Сент-Экзюпери", "Эксмо", "2016", "104"},
+                {"Маленький принц", "Антуан де Сент-Экзюпери", "", "2016", "104"},
+                {"Маленький принц", "Антуан де Сент-Экзюпери", "Эксмо", "", "104"},
+                {"Маленький принц", "Антуан де Сент-Экзюпери", "Эксмо", "2016", ""},
+                {null, "Антуан де Сент-Экзюпери", "Эксмо", "2016", "104"}
+        };
+    }
+
+    @Test(dataProvider = "dataForBookAdd")
+    public void bookAddTestParams(String name, String author, String edition, String year, String page) {
+        assertThrows(ServiceException.class, () -> bookService.bookAdd(name, author, edition, year, page));
+    }
+
     @Test
     public void findByIdTestPositive() throws ServiceException {
         CustomBook actual = bookService.findById("21");
