@@ -14,7 +14,7 @@ public interface AbstractDao<K, T extends CustomEntity> {
 
     List<T> findAll() throws DaoException;
 
-    List<T> sortByTag(SortTag field) throws DaoException;
+    List<T> sortByTag(SortTag tag) throws DaoException;
 
     void close();
 }
